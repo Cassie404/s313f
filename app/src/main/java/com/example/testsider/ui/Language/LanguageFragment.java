@@ -34,8 +34,7 @@ public class LanguageFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        LanguageViewModel galleryViewModel =
-                new ViewModelProvider(this).get(LanguageViewModel.class);
+
 
         binding = FragmentLanguageBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
