@@ -17,7 +17,7 @@ import java.net.ProtocolException;
 import java.net.URL;
 
 public class HomepageJsonHandlerThread extends Thread {
-    private static final String TAG = "JsonHandlerThread";
+    private static final String TAG = "HomepageJsonHandlerThread";
     // URL to get contacts JSON file
 
     private String languageCode = "en";
@@ -94,29 +94,32 @@ public class HomepageJsonHandlerThread extends Thread {
             try {
                 JSONObject jsonObj = new JSONObject(contactStr);
 
-                // Getting JSON Array node
-                JSONArray homeData = jsonObj.getJSONArray("homeData");
+                // Getting JSON Object for "current"
 
-                // looping through All Contacts
-                for (int i = 0; i < homeData.length(); i++) {
-                    JSONObject c = homeData.getJSONObject(i);
+                JSONObject current = jsonObj.getJSONObject("current");
+                HomepageWeatherInfo.setTime(current.getString("time"));
+                HomepageWeatherInfo.setInterval(current.getString("interval"));
+                HomepageWeatherInfo.setTemperature_2m(current.getString("temperature_2m"));
+                HomepageWeatherInfo.setRelative_humidity_2m(current.getString("relative_humidity_2m"));
+                HomepageWeatherInfo.setIs_day(current.getString("is_day"));
+                HomepageWeatherInfo.setPrecipitation(current.getString("precipitation"));
+                HomepageWeatherInfo.setWind_gusts_10m(current.getString("wind_gusts_10m"));
 
-
-                    JSONObject current = c.getJSONObject("current");
-                    String date_time = current.getString("time");
-                    String[] datetime = date_time.split("T");
-                    String temp_avg = current.getString("temperature_2m");
-                    String humidity = current.getString("relative_humidity_2m");
-                    String wind_gusts_10m = current.getString("wind_gusts_10m");
-                    String precipitation = current.getString("precipitation");
-
-                    JSONObject daily = c.getJSONObject("current");
-                    String temp_up = daily.getString("temperature_2m_max");
-                    String temp_down = daily.getString("temperature_2m_min");
+                // Getting JSON Object for "daily"
+                JSONObject daily = jsonObj.getJSONObject("daily");
+                JSONArray date = daily.getJSONArray("time");
+                JSONArray temperature_2m_max = daily.getJSONArray("temperature_2m_max");
+                JSONArray temperature_2m_min = daily.getJSONArray("temperature_2m_min");
 
 
-                    HomepageWeatherInfo.addhomeData(datetime[0], datetime[1], temp_avg, humidity, wind_gusts_10m, precipitation, temp_up, temp_down);
+
+                // Loop through the arrays
+                for (int i = 0; i < date.length(); i++) {
+                    HomepageWeatherInfo.getDate().add(date.getString(i));
+                    HomepageWeatherInfo.getTemperature_2m_min().add(temperature_2m_max.getString(i));
+                    HomepageWeatherInfo.getTemperature_2m_max().add(temperature_2m_min.getString(i));
                 }
+
             } catch (final JSONException e) {
                 Log.e(TAG, "Json parsing error: " + e.getMessage());
             }

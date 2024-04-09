@@ -8,6 +8,8 @@
     android:background="@drawable/background"
     android:orientation="vertical">
 
+
+
 <!--    <ImageView-->
 <!--        android:id="@+id/sidebar"-->
 <!--        android:layout_width="30dp"-->
@@ -99,8 +101,21 @@
 
             </LinearLayout>
 
+<!--            <TextView-->
+<!--                android:id="@+id/instant_temp_avg"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="52dp"-->
+<!--                android:layout_weight="1"-->
+<!--                android:shadowColor="#777777"-->
+<!--                android:shadowDx="4"-->
+<!--                android:shadowDy="4"-->
+<!--                android:shadowRadius="4"-->
+<!--                android:text="24.2°C"-->
+<!--                android:textAlignment="center"-->
+<!--                android:textColor="@color/white"-->
+<!--                android:textSize="46dp" />-->
             <TextView
-                android:id="@+id/instant_temp_avg"
+                android:id="@+id/instant_temp_current"
                 android:layout_width="match_parent"
                 android:layout_height="52dp"
                 android:layout_weight="1"

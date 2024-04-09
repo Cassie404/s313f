@@ -31,13 +31,14 @@ import com.example.testsider.databinding.FragmentHomeBinding;
 import java.util.List;
 import java.util.Locale;
 
-public class HomeFragment extends Fragment implements LocationListener {
+public class HomeFragment extends Fragment{
 
     private FragmentHomeBinding binding;
-
+    private LocationManager locationManager;
+    private LocationListener locationListener;
     Button button_location;
     TextView textView_location;
-    LocationManager locationManager;
+
     List<Address> addresses;
     String today, time;
     ImageView weather_icon;
@@ -49,18 +50,19 @@ public class HomeFragment extends Fragment implements LocationListener {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-//
-//
-//        //location
-//        textView_location = root.findViewById(R.id.current_location);
-//        button_location =  root.findViewById(R.id.button_location);
-//        //Runtime permissions
-//        if (ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
-//                != PackageManager.PERMISSION_GRANTED){
-//            ActivityCompat.requestPermissions(requireActivity(),new String[]{
-//                    Manifest.permission.ACCESS_FINE_LOCATION
-//            },100);
-//        }
+
+
+        //location
+        textView_location = root.findViewById(R.id.current_location);
+        button_location =  root.findViewById(R.id.button_location);
+        //Runtime permissions
+        if (ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(requireActivity(),new String[]{
+                    Manifest.permission.ACCESS_FINE_LOCATION
+            },100);
+        }
+
 //        button_location.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -68,8 +70,9 @@ public class HomeFragment extends Fragment implements LocationListener {
 //                getLocation();
 //            }
 //        });
-//
-////        HomepageWeatherInfo, time&date
+
+
+//        HomepageWeatherInfo, time&date
 //        today = String.valueOf( root.findViewById(R.id.today));
 //        time = String.valueOf( root.findViewById(R.id.time));
 //
@@ -82,8 +85,9 @@ public class HomeFragment extends Fragment implements LocationListener {
 //        todayprecipitation =  root.findViewById(R.id.precipitation);
 //
 //        HomepageJsonHandlerThread jsonHandlerThread = new HomepageJsonHandlerThread();
-//        jsonHandlerThread.homejsonUrl((String)addresses.get(0).toString() ,(String)addresses.get(1).toString());
+//        getLocation(jsonHandlerThread);
 //        jsonHandlerThread.start();
+
 
         return root;
 
@@ -91,48 +95,7 @@ public class HomeFragment extends Fragment implements LocationListener {
 
 
     }
-    @SuppressLint("MissingPermission")
-    private void getLocation(){
-        try {
-            locationManager = (LocationManager) requireContext().getSystemService(Context.LOCATION_SERVICE);
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 5, HomeFragment.this);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-    @Override
-    public void onLocationChanged(@NonNull Location location) {
-        Toast.makeText(getContext(), ""+location.getLatitude()+","+location.getLongitude(), Toast.LENGTH_SHORT).show();
-        try {
-            Geocoder geocoder = new Geocoder(requireActivity(), Locale.getDefault());
-            addresses = geocoder.getFromLocation(location.getLatitude(),location.getLongitude(),1);
-            String address = addresses.get(0).getAddressLine(0);
-            String[] buff = address.split(",");
-            textView_location.setText(buff[buff.length-3] + ',' + buff[buff.length-1]);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-    @Override
-    public void onLocationChanged(@NonNull List<Location> locations) {
-        LocationListener.super.onLocationChanged(locations);
-    }
-    @Override
-    public void onFlushComplete(int requestCode) {
-        LocationListener.super.onFlushComplete(requestCode);
-    }
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-        LocationListener.super.onStatusChanged(provider, status, extras);
-    }
-    @Override
-    public void onProviderEnabled(@NonNull String provider) {
-        LocationListener.super.onProviderEnabled(provider);
-    }
-    @Override
-    public void onProviderDisabled(@NonNull String provider) {
-        LocationListener.super.onProviderDisabled(provider);
-    }
+
 
     @Override
     public void onDestroyView() {
