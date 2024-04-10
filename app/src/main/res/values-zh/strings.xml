@@ -9,10 +9,17 @@
     <string name="action_settings">設定</string>
 
     <string name="menu_home">首頁</string>
+    <string name="menu_additional">更多</string>
     <string name="menu_language">語言</string>
     <string name="menu_slideshow">Slideshow</string>
-
     <string name="gust">風速</string>
     <string name="humidity">濕度</string>
-    <string name="precipitation">降雨機會</string>
+    <string name="ultraviolet">紫外線指數</string>
+    <string name="cloud">雲覆蓋度</string>
+    <string name="visibility">能見度</string>
+    <string name="pressure_msl">海平面壓力</string>
+    <string name="apparent_temp">體感溫度</string>
+
+    <string name="precipitation_probability">降雨機會</string>
+    <string name="precipitation">降雨量</string>
 </resources>

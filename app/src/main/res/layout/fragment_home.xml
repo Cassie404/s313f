@@ -171,7 +171,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="141dp"
+                android:layout_height="140dp"
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginVertical="5dp"
                 android:background="@drawable/cardbg"
@@ -208,7 +208,7 @@
                         android:text="6 km/h"
                         android:textAlignment="center"
                         android:textColor="@color/white"
-                        android:textSize="20dp" />
+                        android:textSize="15dp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -241,7 +241,7 @@
                         android:text="90%"
                         android:textAlignment="center"
                         android:textColor="@color/white"
-                        android:textSize="20dp" />
+                        android:textSize="15dp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -255,29 +255,32 @@
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:layout_gravity="center_horizontal"
-                        android:src="@drawable/precipitation" />
+                        android:src="@drawable/pic62" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
-                        android:text="@string/precipitation"
+                        android:text="@string/precipitation_probability"
                         android:textAlignment="center"
                         android:textColor="@color/white"
                         android:textSize="16dp" />
 
                     <TextView
-                        android:id="@+id/precipitation"
+                        android:id="@+id/precipitation_probability"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
-                        android:text="0mm"
+                        android:text="90%"
                         android:textAlignment="center"
                         android:textColor="@color/white"
-                        android:textSize="20dp" />
+                        android:textSize="15dp" />
                 </LinearLayout>
 
-            </LinearLayout>
+
+
+                </LinearLayout>
+
 
             <LinearLayout
                 android:layout_width="match_parent"

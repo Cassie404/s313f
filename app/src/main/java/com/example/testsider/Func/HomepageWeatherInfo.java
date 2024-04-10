@@ -13,7 +13,12 @@ public class HomepageWeatherInfo {
     private static String is_day;
     private static String precipitation;
     private static String wind_gusts_10m;
-
+    private static String uv_index;
+    private static String precipitation_probability;
+    private static String apparent_temperature;
+    private static String visibility;
+    private static String pressure_msl;
+    private static String cloud_cover;
     private static  List<String> date = new ArrayList<>();
     private static  List<String> temperature_2m_max  = new ArrayList<>();
     private static  List<String> temperature_2m_min  = new ArrayList<>();
@@ -22,12 +27,60 @@ public class HomepageWeatherInfo {
     public HomepageWeatherInfo() {
     }
 
+    public static String getApparent_temperature() {
+        return apparent_temperature;
+    }
+
+    public static void setApparent_temperature(String apparent_temperature) {
+        HomepageWeatherInfo.apparent_temperature = apparent_temperature;
+    }
+
+    public static String getVisibility() {
+        return visibility;
+    }
+
+    public static void setVisibility(String visibility) {
+        HomepageWeatherInfo.visibility = visibility;
+    }
+
+    public static String getPressure_msl() {
+        return pressure_msl;
+    }
+
+    public static void setPressure_msl(String pressure_msl) {
+        HomepageWeatherInfo.pressure_msl = pressure_msl;
+    }
+
+    public static String getCloud_cover() {
+        return cloud_cover;
+    }
+
+    public static void setCloud_cover(String cloud_cover) {
+        HomepageWeatherInfo.cloud_cover = cloud_cover;
+    }
+
     public static String getTime() {
         return time;
     }
 
     public static void setTime(String time) {
         HomepageWeatherInfo.time = time;
+    }
+
+    public static String getPrecipitation_probability() {
+        return precipitation_probability;
+    }
+
+    public static void setPrecipitation_probability(String precipitation_probability) {
+        HomepageWeatherInfo.precipitation_probability = precipitation_probability;
+    }
+
+    public static String getUv_index() {
+        return uv_index;
+    }
+
+    public static void setUv_index(String uv_index) {
+        HomepageWeatherInfo.uv_index = uv_index;
     }
 
     public static String getInterval() {

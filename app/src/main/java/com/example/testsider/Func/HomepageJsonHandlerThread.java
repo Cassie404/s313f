@@ -22,9 +22,9 @@ public class HomepageJsonHandlerThread extends Thread {
 
     private String languageCode = "en";
 
-    static String jsonUrl = "https://api.open-meteo.com/v1/forecast?latitude=22.316668&longitude=114.183334&current=temperature_2m,relative_humidity_2m,is_day,precipitation,wind_gusts_10m&daily=temperature_2m_max,temperature_2m_min&timezone=Asia%2FSingapore&forecast_days=1";
+    static String jsonUrl = "https://api.open-meteo.com/v1/forecast?latitude=22.316668&longitude=114.183334&current=temperature_2m,apparent_temperature,cloud_cover,visibility,pressure_msl,uv_index,relative_humidity_2m,is_day,precipitation_probability,precipitation,wind_gusts_10m&daily=temperature_2m_max,temperature_2m_min&timezone=Asia%2FSingapore&forecast_days=1";
     public void homejsonUrl(){
-        jsonUrl = "https://api.open-meteo.com/v1/forecast?latitude=22.316668&longitude=114.183334&current=temperature_2m,relative_humidity_2m,is_day,precipitation,wind_gusts_10m&daily=temperature_2m_max,temperature_2m_min&timezone=Asia%2FSingapore&forecast_days=1";
+        jsonUrl = "https://api.open-meteo.com/v1/forecast?latitude=22.316668&longitude=114.183334&current=temperature_2m,uv_index,relative_humidity_2m,is_day,precipitation_probability,precipitation,wind_gusts_10m&daily=temperature_2m_max,temperature_2m_min&timezone=Asia%2FSingapore&forecast_days=1";
     }
 
     public void setLanguageCode(String languageCode) {
@@ -33,7 +33,7 @@ public class HomepageJsonHandlerThread extends Thread {
 
     public void homejsonUrl(String latitude, String longitude) {
         jsonUrl = "https://api.open-meteo.com/v1/forecast?latitude="+ latitude +"&longitude="
-                + longitude + "&current=temperature_2m,relative_humidity_2m,is_day,precipitation,wind_gusts_10m&daily=temperature_2m_max,temperature_2m_min&timezone=Asia%2FSingapore&forecast_days=1"
+                + longitude + "&current=temperature_2m,relative_humidity_2m,is_day,apparent_temperature,visibility,pressure_msl,cloud_cover,uv_index,precipitation_probability,precipitation,wind_gusts_10m&daily=temperature_2m_max,temperature_2m_min&timezone=Asia%2FSingapore&forecast_days=1"
                 + "&current=temperature_2m,relative_humidity_2m,is_day,precipitation,wind_gusts_10m"
                 + "&daily=temperature_2m_max,temperature_2m_min"
                 + "&timezone=Asia%2FSingapore"
@@ -104,6 +104,12 @@ public class HomepageJsonHandlerThread extends Thread {
                 HomepageWeatherInfo.setIs_day(current.getString("is_day"));
                 HomepageWeatherInfo.setPrecipitation(current.getString("precipitation"));
                 HomepageWeatherInfo.setWind_gusts_10m(current.getString("wind_gusts_10m"));
+                HomepageWeatherInfo.setPrecipitation_probability(current.getString("precipitation_probability"));
+                HomepageWeatherInfo.setUv_index(current.getString("uv_index"));
+                HomepageWeatherInfo.setCloud_cover(current.getString("cloud_cover"));
+                HomepageWeatherInfo.setApparent_temperature(current.getString("apparent_temperature"));
+                HomepageWeatherInfo.setVisibility(current.getString("visibility"));
+                HomepageWeatherInfo.setPressure_msl(current.getString("pressure_msl"));
 
                 // Getting JSON Object for "daily"
                 JSONObject daily = jsonObj.getJSONObject("daily");

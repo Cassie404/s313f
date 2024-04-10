@@ -37,8 +37,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.testsider.databinding.ActivityMainBinding;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -51,6 +53,10 @@ public class MainActivity extends AppCompatActivity  {
     private String languageCode;
     private LocationManager locationManager;
     private LocationListener locationListener;
+
+//    private String km = "km/h";
+//    private String mm = "mm";
+//    private String oc = "°C";
     private static final int PERMISSION_REQUEST_CODE = 1;
     private String TAG = "MainActivity";
     Button button_location;
@@ -58,7 +64,7 @@ public class MainActivity extends AppCompatActivity  {
     List<Address> addresses;
     TextView today, time;
     ImageView weather_icon;
-    TextView instantTemp_up, instantTemp_down, instantTemp_currnet, todaygust, todayhumidity, todayprecipitation;
+    TextView instantTemp_up, instantTemp_down, instantTemp_currnet, todaygust, todayhumidity, todayprecipitation,precipitation_probability,uv_index;
 
 
     @Override
@@ -77,7 +83,7 @@ public class MainActivity extends AppCompatActivity  {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow)
+                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow,R.id.nav_additional)
                 .setOpenableLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
@@ -85,17 +91,18 @@ public class MainActivity extends AppCompatActivity  {
         NavigationUI.setupWithNavController(navigationView, navController);
 
 
-
+//        uv_index = findViewById(R.id.uv_index);
         today = findViewById(R.id.today);
         time = findViewById(R.id.time);
-
+        precipitation_probability= findViewById(R.id.precipitation_probability);
         weather_icon = findViewById(R.id.weathericon);
         instantTemp_up = findViewById(R.id.instant_temp_up);
         instantTemp_down = findViewById(R.id.instant_temp_down);
         instantTemp_currnet = findViewById(R.id.instant_temp_current);
         todaygust = findViewById(R.id.gust);
         todayhumidity = findViewById(R.id.humidity);
-        todayprecipitation = findViewById(R.id.precipitation);
+//        todayprecipitation = findViewById(R.id.precipitation);
+        button_location= findViewById(R.id.button_location);
 
         HomepageJsonHandlerThread jsonHandlerThread = new HomepageJsonHandlerThread();
         getLocation(jsonHandlerThread);
@@ -103,22 +110,49 @@ public class MainActivity extends AppCompatActivity  {
         try {
             jsonHandlerThread.join();
             todaygust.setText(HomepageWeatherInfo.getWind_gusts_10m());
-            todayprecipitation.setText(HomepageWeatherInfo.getPrecipitation());
-            todayhumidity.setText(HomepageWeatherInfo.getRelative_humidity_2m());
-            instantTemp_up.setText(HomepageWeatherInfo.getTemperature_2m_max().get(0));
-            instantTemp_down.setText(HomepageWeatherInfo.getTemperature_2m_min().get(0));
+//            todayprecipitation.setText(HomepageWeatherInfo.getPrecipitation());
+            todayhumidity.setText(HomepageWeatherInfo.getRelative_humidity_2m()+"%");
+            instantTemp_up.setText(HomepageWeatherInfo.getTemperature_2m_min().get(0)+"°C");
+            instantTemp_down.setText(HomepageWeatherInfo.getTemperature_2m_max().get(0)+"°C");
 //            double temperatureMax = Double.parseDouble(HomepageWeatherInfo.getTemperature_2m_max().get(0));
 //            double temperatureMin = Double.parseDouble(HomepageWeatherInfo.getTemperature_2m_min().get(0));
 //            double result =(temperatureMax + temperatureMin) / 2;
-            instantTemp_currnet.setText(HomepageWeatherInfo.getTemperature_2m());
+            instantTemp_currnet.setText(HomepageWeatherInfo.getTemperature_2m()+"°C");
+            precipitation_probability.setText(HomepageWeatherInfo.getPrecipitation_probability()+"%");
+//            uv_index.setText(HomepageWeatherInfo.getUv_index());
             String dateTimeStr = HomepageWeatherInfo.getTime();
             LocalDateTime dateTime = LocalDateTime.parse(dateTimeStr, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
             String timeStr = dateTime.format(DateTimeFormatter.ofPattern("HH:mm"));
             time.setText(timeStr);
+
+//            // 獲取當前時間
+//            Date currentTime = new Date();
+//            // 設置日期格式
+//            SimpleDateFormat dateFormat = new SimpleDateFormat( "HH:mm");
+//            // 格式化時間
+//            String formattedTime = dateFormat.format(currentTime);
+//            time.setText(formattedTime);
+
             today.setText(HomepageWeatherInfo.getDate().get(0));
+            double temp = Double.parseDouble(HomepageWeatherInfo.getTemperature_2m());
+            double precip = Double.parseDouble(HomepageWeatherInfo.getRelative_humidity_2m());
+            if(  temp >20 && precip <=0.0){
+                weather_icon.setImageResource(R.drawable.pic50);
+            }
+
+
         }catch (InterruptedException e) {
             Log.e(TAG, "InterruptedException: " + e.getMessage());
         }
+
+        button_location.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent refresh = new Intent(view.getContext(), MainActivity.class);
+                finish();
+                startActivity(refresh);
+            }
+        });
 
 
     }
@@ -128,14 +162,14 @@ public class MainActivity extends AppCompatActivity  {
             locationListener = new LocationListener() {
                 @Override
                 public void onLocationChanged(Location location) {
-                    // 當位置改變時，獲取新的緯度和經度
+
                     double latitude = location.getLatitude();
                     double longitude = location.getLongitude();
 
-                    // 獲取到緯度和經度後，可以將其傳遞給您的homejsonUrl方法
+
                     jsonHandlerThread.homejsonUrl(String.valueOf(latitude), String.valueOf(longitude));
 
-                    // 停止位置更新
+
                     locationManager.removeUpdates(locationListener);
                 }
 
@@ -161,7 +195,7 @@ public class MainActivity extends AppCompatActivity  {
                 }
             };
 
-            // 設置位置更新的條件
+
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
         } catch (SecurityException e) {
             e.printStackTrace();
@@ -186,9 +220,9 @@ public class MainActivity extends AppCompatActivity  {
         startActivity(refresh);
 
         //改url語言
-        HomepageJsonHandlerThread jsonHandlerThread = new HomepageJsonHandlerThread();
-        jsonHandlerThread.setLanguageCode(languageCode);
-        jsonHandlerThread.start();
+//        HomepageJsonHandlerThread jsonHandlerThread = new HomepageJsonHandlerThread();
+//        jsonHandlerThread.setLanguageCode(languageCode);
+//        jsonHandlerThread.start();
     }
 
     private void setLocale(String lang){
