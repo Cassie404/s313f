@@ -11,7 +11,8 @@
     <string name="menu_additional">More</string>
 
     <string name="menu_language">Language</string>
-    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_slideshow">Search</string>
+    <string name="hourly_weather_forecast">Hourly weather forecast</string>
 
     <string name="gust">Gust</string>
     <string name="humidity">Humidity</string>

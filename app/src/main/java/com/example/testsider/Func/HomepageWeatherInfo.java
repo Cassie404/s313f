@@ -1,8 +1,11 @@
 package com.example.testsider.Func;
 
+import android.util.Pair;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 // A utility class for creating contact list
 public class HomepageWeatherInfo {
@@ -25,6 +28,8 @@ public class HomepageWeatherInfo {
     private static  List<String> temperature_2m_max  = new ArrayList<>();
     private static  List<String> temperature_2m_min  = new ArrayList<>();
 
+    private static  List<Pair<String, String>> temperature_2m_24  =new ArrayList<>();
+
 
     public HomepageWeatherInfo() {
     }
@@ -35,6 +40,14 @@ public class HomepageWeatherInfo {
 
     public static void setApparent_temperature(String apparent_temperature) {
         HomepageWeatherInfo.apparent_temperature = apparent_temperature;
+    }
+
+    public static List<Pair<String, String>> getTemperature_2m_24() {
+        return temperature_2m_24;
+    }
+
+    public static void setTemperature_2m_24(List<Pair<String, String>> temperature_2m_24) {
+        HomepageWeatherInfo.temperature_2m_24 = temperature_2m_24;
     }
 
     public static String getRain() {

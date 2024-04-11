@@ -22,42 +22,59 @@ import java.util.HashMap;
 
 public class TravelpageJsonHandlerThread extends Thread{
 
-    private static final String TAG = "JsonHandlerThread";
+    private static final String TAG = "TraveljsonHandlerThread";
+    private double lati = 22.2783;
+    private double longti = 114.1747;
+    private String city = "";
     private String languageCode = "en";
-    static String travelUrl = "https://api.open-meteo.com/v1/forecast?latitude=22.2783&longitude=114.1747&current=temperature_2m,relative_humidity_2m,precipitation,wind_gusts_10m&daily=temperature_2m_max,temperature_2m_min&timezone=auto";
-    public static String geo = "https://geocoding-api.open-meteo.com/v1/search?name=Hong Kong&count=1&language=en&format=json";
+    String travelUrl = "https://api.open-meteo.com/v1/forecast?latitude=22.2783&longitude=114.1747&current=temperature_2m,cloud_cover,relative_humidity_2m,precipitation,wind_gusts_10m&daily=temperature_2m_max,temperature_2m_min&timezone=auto&forecast_days=3";
+    public String geo = "https://geocoding-api.open-meteo.com/v1/search?name=Hong%20Kong&count=1&language=en&format=json";
 
-    public void getlocation(String city) {
-        geo = "https://geocoding-api.open-meteo.com/v1/search?name=" + city + "&count=1&language=en&format=json";
+    public TravelpageJsonHandlerThread(String city) {
+        this.city = city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public void updatelocation() {
+        this.city = this.city.replaceAll(" ","%20");
+        geo = "https://geocoding-api.open-meteo.com/v1/search?name=" + this.city+ "&count=1&language=en&format=json";
+        System.out.println(geo);
         String json ="";
 
         try {
             URL url = new URL(geo);
 
-            String lati="";
-            String longti="";
             String line;
 
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             InputStream is = url.openStream();
-            BufferedReader bufferReader = new BufferedReader(new InputStreamReader(is));
 
-            while ((line = bufferReader.readLine())!= null){
-                json = json + line+"\n";
-            }
+            InputStreamReader a = new InputStreamReader(is);
+            BufferedReader bufferReader = new BufferedReader(a);
+            conn.setRequestMethod("GET");
 
+            // Read the response
+            InputStream in = new BufferedInputStream(conn.getInputStream());
+            json = inputStreamToString(in);
+
+            //extract information
+            JSONObject jsonObj = new JSONObject(json);
             if(!json.isEmpty()){
                 JSONObject obj = new JSONObject(json);
                 JSONArray info = obj.getJSONArray("results");
                 JSONObject result = info.getJSONObject(0);
-                lati = result.getString("latitude");
-                longti = result.getString("longtitude");
+                this.lati = result.getDouble("latitude");
+                this.longti = result.getDouble("longitude");
+                traveljsonUrl(this.lati, this.longti);
+                System.out.println(this.lati+"and"+this.longti);
 
             }
             is.close();
             bufferReader.close();
-            traveljsonUrl(lati,longti);
-            System.out.println(lati+"+"+longti);
+            System.out.println(this.lati+"+"+this.longti);
 
         } catch (MalformedURLException e) {
             Log.e(TAG, "MalformedURLException: " + e.getMessage());
@@ -72,38 +89,59 @@ public class TravelpageJsonHandlerThread extends Thread{
 
 
 
-    public void traveljsonUrl(String latitude, String longitude) {
+    public void traveljsonUrl(double latitude, double longitude) {
         travelUrl = "https://api.open-meteo.com/v1/forecast?latitude="+ latitude +"&longitude="
-                + longitude + "&current=temperature_2m,relative_humidity_2m,is_day,precipitation,wind_gusts_10m&daily=temperature_2m_max,temperature_2m_min&timezone=Asia%2FSingapore&forecast_days=1"
-                + "&current=temperature_2m,relative_humidity_2m,is_day,precipitation,wind_gusts_10m"
-                + "&daily=temperature_2m_max,temperature_2m_min"
-                + "&timezone=Asia%2FSingapore"
-                + "&forecast_days=1"
+                + longitude
+                + "&current=temperature_2m,cloud_cover,relative_humidity_2m,is_day,precipitation,wind_gusts_10m"
+                + "&daily=temperature_2m_max,rain_sum,temperature_2m_min,uv_index_clear_sky_max"
+                + "&timezone=auto"
+                + "&forecast_days=7"
                 + "&lang=" + this.languageCode;
     }
 
-    public static String makeRequest() {
-        String json= null;
+    public String makeRequest() {
+        String response = null;
         try {
-            URL url = new URL(travelUrl);
+            URL url = new URL(this.travelUrl);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            InputStream is = url.openStream();
-            BufferedReader bufferReader = new BufferedReader(new InputStreamReader(is));
-            String line;
+            conn.setRequestMethod("GET");
 
-            while ((line = bufferReader.readLine()) != null) {
-                json = json + line + "\n";
-            }
-
-            return json;
+            // Read the response
+            InputStream in = new BufferedInputStream(conn.getInputStream());
+            response = inputStreamToString(in);
         } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
+            Log.e(TAG, "MalformedURLException: " + e.getMessage());
+        } catch (ProtocolException e) {
+            Log.e(TAG, "ProtocolException: " + e.getMessage());
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            Log.e(TAG, "IOException: " + e.getMessage());
+        } catch (Exception e) {
+            Log.e(TAG, "Exception: " + e.getMessage());
         }
+        return response;
+    }
+    private static String inputStreamToString(InputStream is) {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+        StringBuilder sb = new StringBuilder();
+
+        String line = "";
+        try {
+            while ((line = reader.readLine()) != null) {
+                sb.append(line).append('\n');
+            }
+        } catch (IOException e) {
+            Log.e(TAG, "IOException: " + e.getMessage());
+        } finally {
+            try {
+                is.close();
+            } catch (IOException e) {
+                Log.e(TAG, "IOException: " + e.getMessage());
+            }
+        }
+        return sb.toString();
     }
 
-    public String [] toArray(JSONArray json) throws JSONException {
+    public static String [] toArray(JSONArray json) throws JSONException {
         int i = 0;
         String[] array = new String[7];
         while(json.getString(i)!= null){
@@ -114,50 +152,50 @@ public class TravelpageJsonHandlerThread extends Thread{
 
 
     public void run() {
-            String latitude;
-            String longitude;
+        this.updatelocation();
+        // "contactStr" variable store the json file content
+        String contactStr = makeRequest();
+        Log.e(TAG, "Response from url: " + contactStr);
 
-            // "contactStr" variable store the json file content
-            String contactStr = makeRequest();
-            Log.e(TAG, "Response from url: " + contactStr);
+        if (contactStr != null) {
+            try {
+                JSONObject c = new JSONObject(contactStr);
 
-            if (contactStr != null) {
-                try {
-                    JSONObject jsonObj = new JSONObject(contactStr);
+                // Getting JSON Array node
+                //JSONArray travelData = jsonObj.getJSONArray("");
 
-                    // Getting JSON Array node
-                    JSONArray travelData = jsonObj.getJSONArray("travelData");
-
-                    // looping through All Contacts
-                    for (int i = 0; i < travelData.length(); i++) {
-                        JSONObject c = travelData.getJSONObject(i);
-
-                        JSONObject current = c.getJSONObject("current");
-                        String date_time = current.getString("time");
-                        String[] datetime = date_time.split("T");
-                        String temp_avg = current.getString("temperature_2m");
-                        String humidity = current.getString("relative_humidity_2m");
-                        String wind_gusts_10m = current.getString("wind_gusts_10m");
-                        String precipitation = current.getString("precipitation");
-
-                        JSONObject daily = c.getJSONObject("daily");
-                        String[] date = toArray(daily.getJSONArray("time"));
-                        String[] t_up = toArray(daily.getJSONArray("temperature_2m_max"));
-                        String[] t_down = toArray(daily.getJSONArray("temperature_2m_mix"));
-                        String[] uv = toArray(daily.getJSONArray("uv_index_clear_sky_max"));
-
-                        String temp_down = t_up[0];
-                        String temp_up = t_down[0];
+                // looping through All Contacts
+                //for (int i = 0; i < travelData.length(); i++) {
+                // JSONObject c = travelData.getJSONObject(i);
 
 
+                JSONObject current = c.getJSONObject("current");
+                TravelpageWeatherInfo.setDATE( current.getString("time").split("T")[0]);
+                TravelpageWeatherInfo.setTIME(current.getString("time").split("T")[1]);
+                TravelpageWeatherInfo.setTempAvg(Double.toString(current.getDouble("temperature_2m")));
+                TravelpageWeatherInfo.setHUMIDITY(Double.toString(current.getDouble("relative_humidity_2m")));
+                TravelpageWeatherInfo.setGUST(Double.toString(current.getDouble("wind_gusts_10m")));
+                TravelpageWeatherInfo.setPRECIPITATION(Double.toString(current.getDouble("precipitation")));
+                TravelpageWeatherInfo.setCLOUD(Integer.toString(current.getInt("cloud_cover")));
 
-                        TravelpageWeatherInfo.addtravelData(datetime[0], datetime[1], temp_avg, humidity, wind_gusts_10m, precipitation, temp_up, temp_down,date,t_up,t_down,uv);
-                    }
-                } catch (JSONException e) {
-                    throw new RuntimeException(e);
+                JSONObject daily = c.getJSONObject("daily");
+                JSONArray  date = daily.getJSONArray("time");
+
+
+                for (int i = 0; i < date.length(); i++) {
+                    TravelpageWeatherInfo.getDate().add(daily.getJSONArray("time").getString(i));
+                    TravelpageWeatherInfo.getT_up().add(Double.toString(daily.getJSONArray("temperature_2m_max").getDouble(i)));
+                    TravelpageWeatherInfo.getT_down().add(Double.toString(daily.getJSONArray("temperature_2m_min").getDouble(i)));
+                    TravelpageWeatherInfo.getSky().add(Double.toString(daily.getJSONArray("uv_index_clear_sky_max").getDouble(i)));
+                    TravelpageWeatherInfo.getRainSum().add(Double.toString(daily.getJSONArray("rain_sum").getDouble(i)));
                 }
+
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
             }
         }
 
+
+    }
 
 }
