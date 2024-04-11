@@ -119,7 +119,6 @@ public class MainActivity extends AppCompatActivity  {
 //            double result =(temperatureMax + temperatureMin) / 2;
             instantTemp_currnet.setText(HomepageWeatherInfo.getTemperature_2m()+"°C");
             precipitation_probability.setText(HomepageWeatherInfo.getPrecipitation_probability()+"%");
-//            uv_index.setText(HomepageWeatherInfo.getUv_index());
             String dateTimeStr = HomepageWeatherInfo.getTime();
             LocalDateTime dateTime = LocalDateTime.parse(dateTimeStr, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
             String timeStr = dateTime.format(DateTimeFormatter.ofPattern("HH:mm"));
@@ -132,13 +131,11 @@ public class MainActivity extends AppCompatActivity  {
 //            // 格式化時間
 //            String formattedTime = dateFormat.format(currentTime);
 //            time.setText(formattedTime);
-
+            weather_icon.setImageResource(HomepageJsonHandlerThread.changeIcon());
             today.setText(HomepageWeatherInfo.getDate().get(0));
             double temp = Double.parseDouble(HomepageWeatherInfo.getTemperature_2m());
             double precip = Double.parseDouble(HomepageWeatherInfo.getRelative_humidity_2m());
-            if(  temp >20 && precip <=0.0){
-                weather_icon.setImageResource(R.drawable.pic50);
-            }
+
 
 
         }catch (InterruptedException e) {

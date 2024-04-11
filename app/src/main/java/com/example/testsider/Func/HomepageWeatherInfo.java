@@ -13,6 +13,8 @@ public class HomepageWeatherInfo {
     private static String is_day;
     private static String precipitation;
     private static String wind_gusts_10m;
+
+    private static String rain;
     private static String uv_index;
     private static String precipitation_probability;
     private static String apparent_temperature;
@@ -33,6 +35,14 @@ public class HomepageWeatherInfo {
 
     public static void setApparent_temperature(String apparent_temperature) {
         HomepageWeatherInfo.apparent_temperature = apparent_temperature;
+    }
+
+    public static String getRain() {
+        return rain;
+    }
+
+    public static void setRain(String rain) {
+        HomepageWeatherInfo.rain = rain;
     }
 
     public static String getVisibility() {

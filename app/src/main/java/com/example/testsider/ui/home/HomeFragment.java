@@ -63,6 +63,8 @@ public class HomeFragment extends Fragment{
             },100);
         }
 
+
+
 //        button_location.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {

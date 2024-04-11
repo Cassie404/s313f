@@ -2,6 +2,8 @@ package com.example.testsider.Func;
 
 import android.util.Log;
 
+import com.example.testsider.R;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,7 +24,7 @@ public class HomepageJsonHandlerThread extends Thread {
 
     private String languageCode = "en";
 
-    static String jsonUrl = "https://api.open-meteo.com/v1/forecast?latitude=22.316668&longitude=114.183334&current=temperature_2m,apparent_temperature,cloud_cover,visibility,pressure_msl,uv_index,relative_humidity_2m,is_day,precipitation_probability,precipitation,wind_gusts_10m&daily=temperature_2m_max,temperature_2m_min&timezone=Asia%2FSingapore&forecast_days=1";
+    static String jsonUrl = "https://api.open-meteo.com/v1/forecast?latitude=22.316668&longitude=114.183334&current=temperature_2m,rain,apparent_temperature,cloud_cover,visibility,pressure_msl,uv_index,relative_humidity_2m,is_day,precipitation_probability,precipitation,wind_gusts_10m&daily=temperature_2m_max,temperature_2m_min&timezone=Asia%2FSingapore&forecast_days=1";
     public void homejsonUrl(){
         jsonUrl = "https://api.open-meteo.com/v1/forecast?latitude=22.316668&longitude=114.183334&current=temperature_2m,uv_index,relative_humidity_2m,is_day,precipitation_probability,precipitation,wind_gusts_10m&daily=temperature_2m_max,temperature_2m_min&timezone=Asia%2FSingapore&forecast_days=1";
     }
@@ -33,12 +35,50 @@ public class HomepageJsonHandlerThread extends Thread {
 
     public void homejsonUrl(String latitude, String longitude) {
         jsonUrl = "https://api.open-meteo.com/v1/forecast?latitude="+ latitude +"&longitude="
-                + longitude + "&current=temperature_2m,relative_humidity_2m,is_day,apparent_temperature,visibility,pressure_msl,cloud_cover,uv_index,precipitation_probability,precipitation,wind_gusts_10m&daily=temperature_2m_max,temperature_2m_min&timezone=Asia%2FSingapore&forecast_days=1"
+                + longitude + "&current=temperature_2m,relative_humidity_2m,is_day,rain,apparent_temperature,visibility,pressure_msl,cloud_cover,uv_index,precipitation_probability,precipitation,wind_gusts_10m&daily=temperature_2m_max,temperature_2m_min&timezone=Asia%2FSingapore&forecast_days=1"
                 + "&current=temperature_2m,relative_humidity_2m,is_day,precipitation,wind_gusts_10m"
                 + "&daily=temperature_2m_max,temperature_2m_min"
                 + "&timezone=Asia%2FSingapore"
                 + "&forecast_days=1"
                 + "&lang=" + this.languageCode;
+    }
+
+    public static int changeIcon( double cloud ,double rain ){
+
+        if(rain  > 0){
+            if(rain <=2.5 )
+                return R.drawable.pic62;
+            if(rain >2.5)
+                return R.drawable.pic63;
+
+        }else if (cloud  > 0){
+            if(cloud  <= 25)
+                return R.drawable.pic50;
+            if(cloud  > 25 && cloud <= 50 )
+                return R.drawable.pic60;
+            if(cloud > 50)
+                return R.drawable.pic61;
+        }
+        return R.drawable.pic50;
+    }
+
+    public static int changeIcon(){
+        double cloud = Double.parseDouble(HomepageWeatherInfo.getCloud_cover()) ;
+        double rain = Double.parseDouble(HomepageWeatherInfo.getRain());
+        if(rain  > 0){
+            if(rain <=2.5 )
+                return R.drawable.pic62;
+            if(rain >2.5)
+                return R.drawable.pic63;
+        }else if (cloud  > 0){
+            if(cloud  <= 25)
+                return R.drawable.pic50;
+            if(cloud  > 25 && cloud <= 50 )
+                return R.drawable.pic60;
+            if(cloud > 50)
+                return R.drawable.pic61;
+        }
+        return R.drawable.pic50;
     }
 
     public static String makeRequest() {
@@ -110,7 +150,7 @@ public class HomepageJsonHandlerThread extends Thread {
                 HomepageWeatherInfo.setApparent_temperature(current.getString("apparent_temperature"));
                 HomepageWeatherInfo.setVisibility(current.getString("visibility"));
                 HomepageWeatherInfo.setPressure_msl(current.getString("pressure_msl"));
-
+                HomepageWeatherInfo.setRain(current.getString("rain"));
                 // Getting JSON Object for "daily"
                 JSONObject daily = jsonObj.getJSONObject("daily");
                 JSONArray date = daily.getJSONArray("time");
