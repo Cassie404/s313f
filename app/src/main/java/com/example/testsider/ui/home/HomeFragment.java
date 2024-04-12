@@ -40,8 +40,10 @@
     import com.example.testsider.R;
     import com.example.testsider.databinding.FragmentHomeBinding;
 
+    import java.text.SimpleDateFormat;
     import java.time.LocalDateTime;
     import java.time.format.DateTimeFormatter;
+    import java.util.Date;
     import java.util.List;
     import java.util.Locale;
     import java.util.concurrent.CountDownLatch;
@@ -113,18 +115,18 @@
     //            double result =(temperatureMax + temperatureMin) / 2;
                 instantTemp_currnet.setText(HomepageWeatherInfo.getTemperature_2m()+"°C");
                 precipitation_probability.setText(HomepageWeatherInfo.getPrecipitation_probability()+"%");
-                String dateTimeStr = HomepageWeatherInfo.getTime();
-                LocalDateTime dateTime = LocalDateTime.parse(dateTimeStr, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
-                String timeStr = dateTime.format(DateTimeFormatter.ofPattern("HH:mm"));
-                time.setText(timeStr);
+//                String dateTimeStr = HomepageWeatherInfo.getTime();
+//                LocalDateTime dateTime = LocalDateTime.parse(dateTimeStr, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+//                String timeStr = dateTime.format(DateTimeFormatter.ofPattern("HH:mm"));
+//                time.setText(timeStr);
 
-    //            // 獲取當前時間
-    //            Date currentTime = new Date();
-    //            // 設置日期格式
-    //            SimpleDateFormat dateFormat = new SimpleDateFormat( "HH:mm");
-    //            // 格式化時間
-    //            String formattedTime = dateFormat.format(currentTime);
-    //            time.setText(formattedTime);
+                // 獲取當前時間
+                Date currentTime = new Date();
+                // 設置日期格式
+                SimpleDateFormat dateFormat = new SimpleDateFormat( "HH:mm");
+                // 格式化時間
+                String formattedTime = dateFormat.format(currentTime);
+                time.setText(formattedTime);
                 weather_icon.setImageResource(HomepageJsonHandlerThread.changeIcon());
                 today.setText(HomepageWeatherInfo.getDate().get(0));
 //                double temp = Double.parseDouble(HomepageWeatherInfo.getTemperature_2m());

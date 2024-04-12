@@ -95,6 +95,7 @@ public class MainActivity extends AppCompatActivity  {
 
     public void changeLanCh(View view){
        setLocale("zh");
+       HomepageWeatherInfo.setKm("公里/小時");
        Intent refresh = new Intent(this, MainActivity.class);
        finish();
        startActivity(refresh);
@@ -103,6 +104,7 @@ public class MainActivity extends AppCompatActivity  {
     public void changeLanEn(View view){
         //改UI 語言
         setLocale("en");
+        HomepageWeatherInfo.setKm("km/h");
         Intent refresh = new Intent(this, MainActivity.class);
         finish();
         startActivity(refresh);

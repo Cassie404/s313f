@@ -19,7 +19,7 @@
     <string name="visibility">能見度</string>
     <string name="pressure_msl">海平面壓力</string>
     <string name="apparent_temp">體感溫度</string>
-
+    <string name="km">公里/小時</string>
     <string name="precipitation_probability">降雨機會</string>
     <string name="precipitation">降雨量</string>
 </resources>

@@ -17,6 +17,7 @@ public class HomepageWeatherInfo {
     private static String precipitation;
     private static String wind_gusts_10m;
 
+    private static String km = "km/h";
     private static String rain;
     private static String uv_index;
     private static String precipitation_probability;
@@ -56,6 +57,14 @@ public class HomepageWeatherInfo {
 
     public static void setRain(String rain) {
         HomepageWeatherInfo.rain = rain;
+    }
+
+    public static String getKm() {
+        return km;
+    }
+
+    public static void setKm(String km) {
+        HomepageWeatherInfo.km = km;
     }
 
     public static String getVisibility() {

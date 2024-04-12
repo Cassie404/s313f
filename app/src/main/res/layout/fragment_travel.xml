@@ -43,12 +43,30 @@
                 </LinearLayout>
                 <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:paddingHorizontal="10dp">
                     <ImageView android:layout_width="50dp" android:layout_height="50dp" android:layout_gravity="center_horizontal" android:src="@drawable/humidity"/>
-                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/humidity" android:textAlignment="center" android:textColor="@color/white" android:textSize="16dp"/>
-                    <TextView android:id="@+id/humidity" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="90%" android:textAlignment="center" android:textColor="@color/white" android:textSize="20dp"/>
+                    <TextView android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/humidity"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textSize="16dp"/>
+                    <TextView android:id="@+id/humidity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="90%"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textSize="20dp"/>
                 </LinearLayout>
                 <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:paddingHorizontal="10dp">
-                    <ImageView android:layout_width="50dp" android:layout_height="50dp" android:layout_gravity="center_horizontal" android:src="@drawable/precipitation"/>
-                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_vertical" android:text="@string/precipitation" android:textColor="@color/white" android:textSize="16dp"/>
+                    <ImageView android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@drawable/precipitation"/>
+                    <TextView android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAlignment="center"
+                        android:text="@string/precipitation"
+                        android:textColor="@color/white" android:textSize="16dp"/>
                     <TextView android:id="@+id/precipitation" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="0mm" android:textAlignment="center" android:textColor="@color/white" android:textSize="20sp"/>
                 </LinearLayout>
             </LinearLayout>
