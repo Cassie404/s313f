@@ -145,7 +145,7 @@ public class TravelFragment extends Fragment {
         maxtemp.setText(TravelpageWeatherInfo.getT_up().get(0) + "°C");
         mintemp.setText(TravelpageWeatherInfo.getT_down().get(0) + "°C");
         gust.setText(TravelpageWeatherInfo.getGUST()+ "°C");
-        humidity.setText(TravelpageWeatherInfo.getHUMIDITY() + "°C");
+        humidity.setText(TravelpageWeatherInfo.getHUMIDITY() + "%");
         precipitation.setText(TravelpageWeatherInfo.getPRECIPITATION()+ "mm");
         date1.setText(TravelpageWeatherInfo.getDate().get(1));
         date2.setText(TravelpageWeatherInfo.getDate().get(2));
